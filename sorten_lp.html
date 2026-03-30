@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SORTEN Dress Up Party in Hilton Nagoya</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+JP:wght@300;400;500&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #050505;
+            --bg-2: #0d0d0d;
+            --bg-3: #141414;
+            --gold: #c9a84c;
+            --gold-light: #e8cf8a;
+            --cream: #f0ead8;
+            --text: #e8e0cc;
+            --text-muted: #8a8070;
+        }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; font-weight: 300; line-height: 1.8; overflow-x: hidden; }
+
+        .gold-divider { display: flex; align-items: center; gap: 1rem; margin: 0 auto 3rem; max-width: 300px; }
+        .gold-divider::before, .gold-divider::after { content: ''; flex: 1; height: 1px; }
+        .gold-divider::before { background: linear-gradient(90deg, transparent, var(--gold)); }
+        .gold-divider::after { background: linear-gradient(90deg, var(--gold), transparent); }
+        .gold-divider span { color: var(--gold); font-size: 0.7rem; letter-spacing: 0.3em; }
+        section { padding: 6rem 1.5rem; text-align: center; }
+        .section-label { font-size: 0.65rem; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; margin-bottom: 1rem; }
+        h2 { font-family: 'Playfair Display', 'Noto Serif JP', serif; font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 400; color: var(--cream); line-height: 1.4; margin-bottom: 1.5rem; }
+
+        /* NAV */
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 1.2rem 1.5rem; display: flex; justify-content: space-between; align-items: center; transition: background 0.4s ease; }
+        nav.scrolled { background: rgba(5,5,5,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(201,168,76,0.12); }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; letter-spacing: 0.35em; color: var(--cream); text-decoration: none; flex-shrink: 0; }
+        .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+        .nav-links a { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--text-muted); text-decoration: none; text-transform: uppercase; transition: color 0.3s; white-space: nowrap; }
+        .nav-links a:hover { color: var(--gold); }
+
+        /* Hamburger */
+        .hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 36px; height: 36px; cursor: pointer; background: none; border: none; padding: 4px; z-index: 300; }
+        .hamburger span { display: block; width: 22px; height: 1px; background: var(--cream); transition: all 0.35s ease; transform-origin: center; }
+        .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+        /* Mobile drawer */
+        .mobile-menu { display: none; position: fixed; inset: 0; z-index: 190; background: rgba(5,5,5,0.98); backdrop-filter: blur(16px); flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.35s ease; }
+        .mobile-menu.open { opacity: 1; pointer-events: all; }
+        .mobile-menu ul { list-style: none; display: flex; flex-direction: column; align-items: center; width: 100%; }
+        .mobile-menu ul li { width: 100%; text-align: center; border-bottom: 1px solid rgba(201,168,76,0.08); }
+        .mobile-menu ul li:first-child { border-top: 1px solid rgba(201,168,76,0.08); }
+        .mobile-menu ul a { display: block; padding: 1.3rem 2rem; font-size: 0.72rem; letter-spacing: 0.4em; color: var(--text-muted); text-decoration: none; text-transform: uppercase; transition: color 0.3s; }
+        .mobile-menu ul a:hover, .mobile-menu ul a:active { color: var(--gold); }
+        .mobile-menu-line { width: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin-bottom: 2rem; }
+
+        /* HERO */
+        #hero { min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 5rem 1.5rem 4rem; background: radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.07) 0%, transparent 60%), radial-gradient(ellipse at 80% 30%, rgba(201,168,76,0.05) 0%, transparent 50%), var(--bg); overflow: hidden; }
+        #hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%); pointer-events: none; }
+        .hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; margin-bottom: 1.8rem; animation: fadeInDown 1s ease both; }
+        .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 16vw, 10rem); font-weight: 400; letter-spacing: 0.18em; line-height: 1; margin-bottom: 0.5rem; animation: fadeInUp 1s ease 0.2s both; background: linear-gradient(135deg, #f0ead8 0%, #c9a84c 50%, #f0ead8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-subtitle { font-family: 'Cormorant Garamond', serif; font-size: clamp(0.85rem, 3vw, 1.3rem); font-weight: 300; font-style: italic; color: var(--gold-light); letter-spacing: 0.08em; margin-bottom: 2.5rem; animation: fadeInUp 1s ease 0.4s both; word-break: keep-all; }
+        .hero-meta { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; animation: fadeInUp 1s ease 0.6s both; }
+        .hero-date { font-family: 'Noto Serif JP', serif; font-size: clamp(0.88rem, 2.5vw, 1.3rem); font-weight: 300; color: var(--cream); letter-spacing: 0.18em; }
+        .hero-venue { font-size: 0.62rem; letter-spacing: 0.28em; color: var(--gold); text-transform: uppercase; }
+        .hero-cta { margin-top: 2.5rem; animation: fadeInUp 1s ease 0.8s both; }
+        .btn-gold { display: inline-block; padding: 0.9rem 2.5rem; border: 1px solid var(--gold); color: var(--gold); font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; text-decoration: none; transition: all 0.4s ease; position: relative; overflow: hidden; z-index: 0; white-space: nowrap; }
+        .btn-gold::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--gold); transition: left 0.4s ease; z-index: -1; }
+        .btn-gold:hover { color: var(--bg); }
+        .btn-gold:hover::before { left: 0; }
+        .btn-line { display: inline-flex; align-items: center; gap: 0.8rem; padding: 1rem 2.5rem; background: #06C755; color: #fff; font-size: 0.75rem; letter-spacing: 0.12em; text-decoration: none; transition: opacity 0.3s ease; font-weight: 400; word-break: keep-all; }
+        .btn-line:hover { opacity: 0.85; }
+        .scroll-indicator { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; animation: fadeIn 2s ease 1.5s both; }
+        .scroll-indicator span { font-size: 0.55rem; letter-spacing: 0.35em; color: var(--text-muted); }
+        .scroll-line { width: 1px; height: 36px; background: linear-gradient(180deg, var(--gold), transparent); animation: scrollPulse 2s ease infinite; }
+
+        /* ABOUT */
+        #about { background: var(--bg-2); position: relative; }
+        #about::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .about-copy { max-width: 620px; margin: 0 auto 2rem; font-family: 'Noto Serif JP', serif; font-size: clamp(0.92rem, 2vw, 1.1rem); font-weight: 300; line-height: 2.2; color: var(--text); word-break: keep-all; overflow-wrap: break-word; }
+        .about-tagline { font-family: 'Playfair Display', 'Noto Serif JP', serif; font-size: clamp(1.05rem, 3vw, 1.7rem); font-style: italic; color: var(--gold-light); font-weight: 400; margin-top: 1.5rem; word-break: keep-all; }
+
+        /* HIGHLIGHTS */
+        #highlights { background: var(--bg); }
+        .highlights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); max-width: 960px; margin: 0 auto; border: 1px solid rgba(201,168,76,0.12); }
+        .highlight-card { padding: 2.5rem 1.8rem; border: 1px solid rgba(201,168,76,0.08); transition: background 0.4s ease; }
+        .highlight-card:hover { background: rgba(201,168,76,0.04); }
+        .highlight-icon { font-size: 1.5rem; color: var(--gold); margin-bottom: 1.2rem; display: block; }
+        .highlight-title { font-family: 'Playfair Display', 'Noto Serif JP', serif; font-size: 1rem; color: var(--cream); font-weight: 400; margin-bottom: 0.8rem; }
+        .highlight-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.9; }
+
+        /* ORGANIZER */
+        #organizer { background: var(--bg-3); position: relative; }
+        #organizer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .organizer-quote { max-width: 580px; margin: 0 auto; text-align: left; }
+        .quote-mark { font-family: 'Playfair Display', serif; font-size: 5rem; line-height: 0.8; color: rgba(201,168,76,0.2); display: block; margin-bottom: 1rem; }
+        .organizer-text { font-family: 'Noto Serif JP', serif; font-size: clamp(0.9rem, 1.8vw, 1.05rem); font-weight: 300; line-height: 2.4; color: var(--text); overflow-wrap: break-word; }
+        .organizer-text em { font-style: normal; color: var(--gold-light); font-weight: 400; }
+        .organizer-sig { margin-top: 2rem; display: flex; align-items: center; gap: 1.2rem; }
+        .sig-line { flex: 0 0 40px; height: 1px; background: var(--gold); }
+        .sig-name { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--gold); letter-spacing: 0.25em; }
+
+        /* DRESS CODE */
+        #dresscode { background: var(--bg-2); position: relative; }
+        #dresscode::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .dresscode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 700px; margin: 0 auto; }
+        .dresscode-card { border: 1px solid rgba(201,168,76,0.15); padding: 2.2rem 1.8rem; text-align: left; transition: border-color 0.3s; }
+        .dresscode-card:hover { border-color: rgba(201,168,76,0.4); }
+        .dresscode-gender { font-size: 0.6rem; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; margin-bottom: 1rem; }
+        .dresscode-main { font-family: 'Playfair Display', 'Noto Serif JP', serif; font-size: 1rem; color: var(--cream); font-weight: 400; margin-bottom: 1rem; }
+        .dresscode-items { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+        .dresscode-items li { font-size: 0.82rem; color: var(--text-muted); padding-left: 1rem; position: relative; line-height: 1.6; }
+        .dresscode-items li::before { content: '–'; position: absolute; left: 0; color: rgba(201,168,76,0.5); }
+        .dresscode-note { max-width: 700px; margin: 1.8rem auto 0; font-size: 0.74rem; color: var(--text-muted); line-height: 2; border-top: 1px solid rgba(201,168,76,0.08); padding-top: 1.4rem; text-align: left; word-break: keep-all; }
+
+        /* MENU */
+        #menu { background: var(--bg); position: relative; }
+        #menu::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .menu-table { max-width: 560px; margin: 0 auto; text-align: left; }
+        .menu-course { display: flex; align-items: flex-start; gap: 1.5rem; padding: 1.4rem 0; border-bottom: 1px solid rgba(201,168,76,0.1); }
+        .course-label { font-size: 0.55rem; letter-spacing: 0.22em; color: var(--gold); text-transform: uppercase; min-width: 76px; padding-top: 0.25rem; flex-shrink: 0; }
+        .course-content h4 { font-family: 'Playfair Display', 'Noto Serif JP', serif; font-size: 0.97rem; color: var(--cream); font-weight: 400; margin-bottom: 0.3rem; }
+        .course-content p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; }
+        .menu-note { margin-top: 1.8rem; font-size: 0.71rem; color: var(--text-muted); letter-spacing: 0.06em; text-align: center; line-height: 1.9; }
+
+        /* TICKET */
+        #ticket { background: var(--bg-3); position: relative; }
+        #ticket::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto 3rem; text-align: left; }
+        .pricing-card { border: 1px solid rgba(201,168,76,0.2); padding: 2.2rem 1.8rem; position: relative; transition: border-color 0.3s; }
+        .pricing-card:hover { border-color: rgba(201,168,76,0.45); }
+        .pricing-card.featured { border-color: var(--gold); }
+        .featured-badge { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--bg); font-size: 0.56rem; letter-spacing: 0.2em; padding: 0.28rem 1rem; text-transform: uppercase; white-space: nowrap; }
+        .pricing-title { font-family: 'Playfair Display', 'Noto Serif JP', serif; font-size: 1rem; color: var(--cream); font-weight: 400; margin-bottom: 1rem; }
+        .pricing-sub { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 1rem; margin-top: -0.6rem; }
+        .price-row { display: flex; justify-content: space-between; align-items: baseline; padding: 0.55rem 0; border-bottom: 1px solid rgba(201,168,76,0.06); gap: 0.5rem; flex-wrap: wrap; }
+        .price-label { font-size: 0.8rem; color: var(--text-muted); }
+        .price-value { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--gold-light); font-weight: 300; white-space: nowrap; }
+        .price-value small { font-size: 0.65rem; color: var(--text-muted); margin-left: 0.2rem; }
+        .cashback-box { max-width: 540px; margin: 0 auto 2.5rem; border: 1px solid rgba(201,168,76,0.15); padding: 1.8rem 2rem; text-align: left; }
+        .cashback-title { font-family: 'Playfair Display', 'Noto Serif JP', serif; font-size: 0.97rem; color: var(--cream); font-weight: 400; margin-bottom: 1rem; }
+        .cashback-row { display: flex; justify-content: space-between; align-items: baseline; padding: 0.5rem 0; border-bottom: 1px solid rgba(201,168,76,0.06); font-size: 0.82rem; gap: 0.8rem; flex-wrap: wrap; }
+        .cashback-row span:first-child { color: var(--text-muted); }
+        .cashback-row span:last-child { color: var(--gold-light); white-space: nowrap; }
+        .cashback-note { margin-top: 0.8rem; font-size: 0.7rem; color: var(--text-muted); line-height: 1.9; }
+        .best-price-box { max-width: 420px; margin: 0 auto 3rem; border: 1px solid rgba(201,168,76,0.3); padding: 1.8rem 2rem; }
+        .best-price-label { font-size: 0.57rem; letter-spacing: 0.16em; color: var(--gold); text-transform: uppercase; margin-bottom: 1.2rem; line-height: 1.9; word-break: keep-all; }
+        .best-price-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem; gap: 1rem; }
+        .best-price-row .type { font-size: 0.85rem; color: var(--text-muted); }
+        .best-price-row .amount { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; color: var(--gold-light); }
+        .cancel-section { max-width: 480px; margin: 0 auto; text-align: left; }
+        .cancel-title { font-size: 0.6rem; letter-spacing: 0.28em; color: var(--gold); text-transform: uppercase; margin-bottom: 1rem; text-align: center; }
+        .cancel-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid rgba(201,168,76,0.06); font-size: 0.82rem; }
+        .cancel-row span:first-child { color: var(--text-muted); }
+        .cancel-row span:last-child { color: var(--cream); }
+
+        /* CTA */
+        #cta { background: var(--bg-2); position: relative; }
+        #cta::before, #cta::after { content: ''; position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        #cta::before { top: 0; }
+        #cta::after { bottom: 0; }
+        .cta-copy { font-family: 'Noto Serif JP', serif; font-size: clamp(0.92rem, 2vw, 1.1rem); font-weight: 300; color: var(--text-muted); max-width: 480px; margin: 0 auto 2.5rem; line-height: 2.2; word-break: keep-all; }
+        .cta-copy em { font-style: normal; color: var(--gold-light); }
+        .cta-steps { display: flex; flex-direction: column; gap: 0.7rem; max-width: 340px; margin: 0 auto 2.5rem; text-align: left; }
+        .cta-step { display: flex; align-items: flex-start; gap: 1rem; font-size: 0.84rem; color: var(--text-muted); line-height: 1.7; }
+        .step-num { flex: 0 0 22px; height: 22px; border: 1px solid rgba(201,168,76,0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: var(--gold); margin-top: 0.1rem; }
+
+        /* VENUE */
+        #venue { background: var(--bg); position: relative; }
+        #venue::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .venue-name { font-family: 'Playfair Display', 'Noto Serif JP', serif; font-size: clamp(1.3rem, 3vw, 2rem); color: var(--cream); font-weight: 400; margin-bottom: 0.4rem; }
+        .venue-floor { font-size: 0.64rem; letter-spacing: 0.22em; color: var(--gold); text-transform: uppercase; margin-bottom: 1.5rem; word-break: keep-all; }
+        .venue-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 2; margin-bottom: 2rem; max-width: 540px; margin-left: auto; margin-right: auto; word-break: keep-all; }
+        .venue-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .link-outline { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; border: 1px solid rgba(201,168,76,0.3); color: var(--gold); font-size: 0.66rem; letter-spacing: 0.14em; text-decoration: none; transition: all 0.3s ease; white-space: nowrap; }
+        .link-outline:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+
+        /* STAFF */
+        #staff { background: var(--bg-3); position: relative; }
+        #staff::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .organizer-block { margin-bottom: 4rem; }
+        .staff-badge { font-size: 0.58rem; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; margin-bottom: 1.5rem; }
+        .avatar-circle { width: 80px; height: 80px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.35); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; background: rgba(201,168,76,0.04); font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold); }
+        .staff-name { font-family: 'Playfair Display', 'Noto Serif JP', serif; font-size: 1.1rem; color: var(--cream); font-weight: 400; }
+        .staff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 2rem; max-width: 680px; margin: 0 auto; }
+        .staff-card { text-align: center; }
+        .staff-role { font-size: 0.58rem; letter-spacing: 0.18em; color: var(--text-muted); text-transform: uppercase; margin-top: 0.3rem; }
+
+        /* FAQ */
+        #faq { background: var(--bg-2); position: relative; }
+        #faq::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .faq-list { max-width: 620px; margin: 0 auto; text-align: left; }
+        .faq-item { border-bottom: 1px solid rgba(201,168,76,0.1); }
+        .faq-question { width: 100%; background: none; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; padding: 1.4rem 0; gap: 1.2rem; text-align: left; }
+        .faq-q-text { font-family: 'Noto Serif JP', serif; font-size: 0.92rem; color: var(--cream); font-weight: 400; line-height: 1.7; }
+        .faq-icon { flex-shrink: 0; width: 20px; height: 20px; border: 1px solid rgba(201,168,76,0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 0.85rem; transition: transform 0.3s ease; margin-top: 0.1rem; }
+        .faq-item.open .faq-icon { transform: rotate(45deg); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .faq-answer-inner { font-size: 0.84rem; color: var(--text-muted); line-height: 2; padding-bottom: 1.4rem; word-break: keep-all; }
+
+        /* ACCESS */
+        #access { background: var(--bg); position: relative; }
+        #access::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .access-info { max-width: 500px; margin: 0 auto; }
+        .access-row { display: flex; gap: 1.5rem; padding: 1.2rem 0; border-bottom: 1px solid rgba(201,168,76,0.08); text-align: left; }
+        .access-label { font-size: 0.6rem; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; min-width: 64px; padding-top: 0.2rem; flex-shrink: 0; }
+        .access-value { font-size: 0.88rem; color: var(--text-muted); line-height: 1.9; word-break: break-all; overflow-wrap: break-word; }
+
+        /* CONTACT */
+        #contact { background: var(--bg-3); position: relative; }
+        #contact::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .contact-box { max-width: 520px; margin: 0 auto; text-align: left; }
+        .contact-row { display: flex; gap: 1.5rem; padding: 1.2rem 0; border-bottom: 1px solid rgba(201,168,76,0.08); align-items: flex-start; }
+        .contact-label { font-size: 0.6rem; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; min-width: 64px; padding-top: 0.2rem; flex-shrink: 0; }
+        .contact-value { font-size: 0.88rem; color: var(--text-muted); line-height: 1.9; overflow-wrap: break-word; word-break: break-all; }
+        .contact-value a { color: var(--gold-light); text-decoration: none; border-bottom: 1px solid rgba(232,207,138,0.3); transition: border-color 0.3s; }
+        .contact-value a:hover { border-color: var(--gold-light); }
+        .contact-note { margin-top: 1.5rem; font-size: 0.72rem; color: var(--text-muted); line-height: 2; text-align: center; word-break: keep-all; }
+
+        /* FOOTER */
+        footer { padding: 3rem 1.5rem; text-align: center; background: var(--bg); border-top: 1px solid rgba(201,168,76,0.1); }
+        .footer-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; letter-spacing: 0.3em; background: linear-gradient(135deg, #f0ead8, #c9a84c, #f0ead8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+        footer p { font-size: 0.71rem; color: var(--text-muted); letter-spacing: 0.1em; }
+
+        /* ANIMATIONS */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scrollPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+        .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links { display: none; }
+            .mobile-menu { display: flex; }
+            section { padding: 5rem 1.2rem; }
+        }
+        @media (max-width: 600px) {
+            .menu-course { flex-direction: column; gap: 0.3rem; }
+            .access-row { flex-direction: column; gap: 0.25rem; }
+            .contact-row { flex-direction: column; gap: 0.25rem; }
+            .highlights-grid { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .cashback-row { flex-direction: column; gap: 0.2rem; }
+            .dresscode-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+    <a href="#hero" class="nav-logo">SORTEN</a>
+    <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#dresscode">Dress Code</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#ticket">Ticket</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#cta">お申込み</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="メニューを開く">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-line"></div>
+    <ul>
+        <li><a href="#about" class="mobile-link">About</a></li>
+        <li><a href="#dresscode" class="mobile-link">Dress Code</a></li>
+        <li><a href="#menu" class="mobile-link">Menu</a></li>
+        <li><a href="#ticket" class="mobile-link">Ticket</a></li>
+        <li><a href="#venue" class="mobile-link">Venue</a></li>
+        <li><a href="#staff" class="mobile-link">Staff</a></li>
+        <li><a href="#faq" class="mobile-link">FAQ</a></li>
+        <li><a href="#access" class="mobile-link">Access</a></li>
+        <li><a href="#contact" class="mobile-link">Contact</a></li>
+        <li><a href="#cta" class="mobile-link">お申込み</a></li>
+    </ul>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+    <p class="hero-eyebrow">A Night of Luxury &amp; Elegance</p>
+    <h1 class="hero-title">SORTEN</h1>
+    <p class="hero-subtitle">Dress Up Party in Hilton Nagoya</p>
+    <div class="hero-meta">
+        <div class="hero-date">2026 . 10 . 25 &nbsp;｜&nbsp; 18:00 — 20:00</div>
+        <div class="hero-venue">Hilton Nagoya &nbsp;「ONE O FIVE」</div>
+    </div>
+    <div class="hero-cta">
+        <a href="#cta" class="btn-gold">お申込みはこちら</a>
+    </div>
+    <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <p class="section-label reveal">The Evening</p>
+    <h2 class="reveal">名古屋で最もエレガントな夜</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <div class="about-copy reveal">
+        世界が認めるラグジュアリーホテル<br>
+        『Hilton Nagoya（ヒルトン名古屋）』にて開催決定。<br><br>
+        仕立ての美しいフォーマルスーツと、<br>
+        気品漂うエレガントドレスに身を包み、<br>
+        一流ホテルの洗練された空間で過ごす非日常の時間。
+    </div>
+    <p class="about-tagline reveal">"大人の社交場"が誕生する夜。</p>
+</section>
+
+<!-- HIGHLIGHTS -->
+<section id="highlights">
+    <p class="section-label reveal">Experience</p>
+    <h2 class="reveal">この夜だけの特別な体験</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <div class="highlights-grid reveal">
+        <div class="highlight-card">
+            <span class="highlight-icon">✦</span>
+            <div class="highlight-title">地上105mの夜景</div>
+            <p class="highlight-desc">名古屋市街を一望するスカイバンケット。高層ビルが瞬く夜景が、特別な夜を彩る。</p>
+        </div>
+        <div class="highlight-card">
+            <span class="highlight-icon">✦</span>
+            <div class="highlight-title">一流ホテルの上質なサービス</div>
+            <p class="highlight-desc">フルコースディナーと洗練されたホスピタリティ。仲間とともに非日常の体験を。</p>
+        </div>
+        <div class="highlight-card">
+            <span class="highlight-icon">✦</span>
+            <div class="highlight-title">お楽しみゲーム &amp; 景品</div>
+            <p class="highlight-desc">景品が当たるお楽しみゲームを開催予定。内容は当日のお楽しみ。</p>
+        </div>
+    </div>
+</section>
+
+<!-- ORGANIZER -->
+<section id="organizer">
+    <p class="section-label reveal">From the Organizer</p>
+    <h2 class="reveal">主催者より</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <div class="organizer-quote reveal">
+        <span class="quote-mark">"</span>
+        <p class="organizer-text">
+            はじめまして、主催のEIKOです。<br><br>
+            今年、自分の節目をきっかけに<br>
+            「せっかくなら、みんなで特別な夜を過ごしたい」と思って<br>
+            このパーティーを企画しました。<br><br>
+            ドレスアップして、一流ホテルで、おいしいご飯を食べて。<br>
+            それだけで、十分すぎるくらい素敵な夜になると思っています。<br><br>
+            一緒に楽しみましょう。
+        </p>
+        <div class="organizer-sig">
+            <div class="sig-line"></div>
+            <div class="sig-name">EIKO</div>
+        </div>
+    </div>
+</section>
+
+<!-- DRESS CODE -->
+<section id="dresscode">
+    <p class="section-label reveal">Dress Code</p>
+    <h2 class="reveal">ドレスコードガイド</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <div class="dresscode-grid reveal">
+        <div class="dresscode-card">
+            <div class="dresscode-gender">For Ladies</div>
+            <div class="dresscode-main">エレガントドレス</div>
+            <ul class="dresscode-items">
+                <li>イブニングドレス / カクテルドレス</li>
+                <li>フォーマルワンピース</li>
+                <li>膝丈〜ロング丈が◎</li>
+                <li>上品な光沢素材・レース素材</li>
+                <li>ヒール・フォーマルパンプス</li>
+            </ul>
+        </div>
+        <div class="dresscode-card">
+            <div class="dresscode-gender">For Gentlemen</div>
+            <div class="dresscode-main">フォーマルスーツ</div>
+            <ul class="dresscode-items">
+                <li>スーツ（ネクタイ着用推奨）</li>
+                <li>ジャケット + スラックス</li>
+                <li>ネイビー・ブラック・チャコールが◎</li>
+                <li>革靴（磨いた状態で）</li>
+                <li>ポケットチーフあると尚良し</li>
+            </ul>
+        </div>
+    </div>
+    <p class="dresscode-note reveal">
+        ※ デニム・スニーカー・カジュアルな服装でのご参加はご遠慮ください。<br>
+        ※ ドレスアップに自信がない方もご安心を。当日までにEIKOへ気軽にご相談ください。
+    </p>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+    <p class="section-label reveal">Dinner</p>
+    <h2 class="reveal">フルコースディナー</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <div class="menu-table reveal">
+        <div class="menu-course">
+            <div class="course-label">Appetizer</div>
+            <div class="course-content">
+                <h4>前菜</h4>
+                <p>鯵のターメリックタルト　昆布茶のジュレと共に</p>
+            </div>
+        </div>
+        <div class="menu-course">
+            <div class="course-label">Fish</div>
+            <div class="course-content">
+                <h4>魚料理</h4>
+                <p>オレンジ香るコンソメで蒸した真鯛</p>
+            </div>
+        </div>
+        <div class="menu-course">
+            <div class="course-label">Meat</div>
+            <div class="course-content">
+                <h4>肉料理</h4>
+                <p>カカオを纏った牛フィレ肉　豆鼓ソース</p>
+            </div>
+        </div>
+        <div class="menu-course">
+            <div class="course-label">Dessert</div>
+            <div class="course-content">
+                <h4>デザート</h4>
+                <p>西尾抹茶のチョコレートテリーヌ　ほか</p>
+            </div>
+        </div>
+        <p class="menu-note">※ メニューは一例です。内容は変更になる場合がございます。</p>
+    </div>
+</section>
+
+<!-- TICKET -->
+<section id="ticket">
+    <p class="section-label reveal">Ticket</p>
+    <h2 class="reveal">参加費のご案内</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <div class="pricing-grid reveal">
+        <div class="pricing-card">
+            <div class="pricing-title">通常料金</div>
+            <div class="price-row">
+                <span class="price-label">ビジター</span>
+                <span class="price-value">¥25,000<small> 税込</small></span>
+            </div>
+            <div class="price-row">
+                <span class="price-label">会員（スクール生）</span>
+                <span class="price-value">¥23,000<small> 税込</small></span>
+            </div>
+        </div>
+        <div class="pricing-card featured">
+            <div class="featured-badge">Early Bird</div>
+            <div class="pricing-title">早期割引 — 第1弾</div>
+            <div class="pricing-sub">3月末までのお申込み</div>
+            <div class="price-row">
+                <span class="price-label">ビジター</span>
+                <span class="price-value">¥22,000<small> 税込</small></span>
+            </div>
+            <div class="price-row">
+                <span class="price-label">スクール生</span>
+                <span class="price-value">¥20,000<small> 税込</small></span>
+            </div>
+        </div>
+        <div class="pricing-card">
+            <div class="pricing-title">早期割引 — 第2弾</div>
+            <div class="pricing-sub">6月末までのお申込み</div>
+            <div class="price-row">
+                <span class="price-label">ビジター</span>
+                <span class="price-value">¥23,000<small> 税込</small></span>
+            </div>
+            <div class="price-row">
+                <span class="price-label">スクール生</span>
+                <span class="price-value">¥21,000<small> 税込</small></span>
+            </div>
+        </div>
+    </div>
+    <div class="cashback-box reveal">
+        <div class="cashback-title">お誘い合わせ割引（セット割）</div>
+        <div class="cashback-row">
+            <span>ご紹介者様</span>
+            <span>¥1,000 キャッシュバック</span>
+        </div>
+        <div class="cashback-row">
+            <span>誘われたビジター様</span>
+            <span>¥1,000 キャッシュバック</span>
+        </div>
+        <p class="cashback-note">※ 2名以上お誘いいただいた場合、最大 ¥2,000 まで割引適用</p>
+    </div>
+    <div class="best-price-box reveal">
+        <div class="best-price-label">最大割引適用時（3月末まで ＋ お誘い割）</div>
+        <div class="best-price-row">
+            <span class="type">ビジター</span>
+            <span class="amount">¥21,000</span>
+        </div>
+        <div class="best-price-row">
+            <span class="type">スクール生</span>
+            <span class="amount">¥18,000</span>
+        </div>
+    </div>
+    <div class="cancel-section reveal">
+        <div class="cancel-title">Cancellation Policy</div>
+        <div class="cancel-row"><span>2ヶ月前まで</span><span>20%</span></div>
+        <div class="cancel-row"><span>1ヶ月前まで</span><span>50%</span></div>
+        <div class="cancel-row"><span>1週間前まで</span><span>80%</span></div>
+        <div class="cancel-row"><span>2日前以降</span><span>100%</span></div>
+        <p style="font-size:0.7rem; color:var(--text-muted); margin-top:0.8rem; text-align:center; line-height:1.9;">※ 会場・運営準備の都合上、ご了承ください</p>
+    </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+    <p class="section-label reveal">Apply</p>
+    <h2 class="reveal">一緒に、忘れられない夜を</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <p class="cta-copy reveal">
+        「いつか」じゃなく、<em>「今年」</em>体験しませんか？<br>
+        早めのお申込みが、断然お得です。<br>
+        公式LINEより参加申込み・お支払い方法をご案内します。
+    </p>
+    <div class="cta-steps reveal">
+        <div class="cta-step"><div class="step-num">1</div><div>公式LINEを友だち追加する</div></div>
+        <div class="cta-step"><div class="step-num">2</div><div>参加申込み方法・お支払い詳細を受け取る</div></div>
+        <div class="cta-step"><div class="step-num">3</div><div>最新情報をいち早くチェック</div></div>
+    </div>
+    <div class="reveal">
+        <a href="https://lin.ee/6hyUu6b" target="_blank" class="btn-line">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.02 2 11c0 3.25 1.94 6.1 4.89 7.81-.07.47-.27 1.59-.31 1.82-.05.28.1.27.22.2.09-.06 1.36-.9 1.93-1.28.41.06.84.09 1.27.09 5.52 0 10-4.02 10-9S17.52 2 12 2z"/></svg>
+            公式LINE に登録する（無料）
+        </a>
+    </div>
+</section>
+
+<!-- VENUE -->
+<section id="venue">
+    <p class="section-label reveal">Venue</p>
+    <h2 class="reveal">会場について</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <div class="reveal">
+        <div class="venue-name">ワン・オー・ファイブ</div>
+        <div class="venue-floor">ONE O FIVE ／ ヒルトン名古屋 地上105m</div>
+        <p class="venue-desc">
+            地上105mに位置し、名古屋市街を一望するスカイバンケット。<br>
+            両側の大きな窓からは、夕方は日没の美しい空が広がり、<br>
+            夜は高層ビルの瞬く夜景があなたを照らす。<br>
+            ロマンチックでラグジュアリーな空間が、この夜の舞台。
+        </p>
+        <div class="venue-links">
+            <a href="https://www.hiltonwedding.jp/nagoya/detail/banquet/105.php" target="_blank" class="link-outline">会場の詳細を見る →</a>
+            <a href="https://share.google/xyipHZa7dw7kOy9Q8" target="_blank" class="link-outline">Google Map →</a>
+        </div>
+    </div>
+</section>
+
+<!-- STAFF -->
+<section id="staff">
+    <p class="section-label reveal">Organizer &amp; Staff</p>
+    <h2 class="reveal">主催・スタッフ紹介</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <div class="organizer-block reveal">
+        <div class="staff-badge">Organizer</div>
+        <div class="avatar-circle">E</div>
+        <div class="staff-name">EIKO</div>
+    </div>
+    <div class="reveal" style="margin-bottom: 3.5rem;">
+        <div class="staff-badge">Main Staff</div>
+        <div class="staff-grid">
+            <div class="staff-card"><div class="avatar-circle" style="width:60px;height:60px;font-size:0.9rem;">し</div><div class="staff-name" style="font-size:0.9rem;">しら</div><div class="staff-role">Main Staff</div></div>
+            <div class="staff-card"><div class="avatar-circle" style="width:60px;height:60px;font-size:0.9rem;">M</div><div class="staff-name" style="font-size:0.9rem;">MASA</div><div class="staff-role">Main Staff</div></div>
+            <div class="staff-card"><div class="avatar-circle" style="width:60px;height:60px;font-size:0.9rem;">K</div><div class="staff-name" style="font-size:0.9rem;">ケンショウ</div><div class="staff-role">Main Staff</div></div>
+            <div class="staff-card"><div class="avatar-circle" style="width:60px;height:60px;font-size:0.9rem;">あ</div><div class="staff-name" style="font-size:0.9rem;">あい</div><div class="staff-role">Main Staff</div></div>
+        </div>
+    </div>
+    <div class="reveal">
+        <div class="staff-badge">Sub Staff</div>
+        <div class="staff-grid">
+            <div class="staff-card"><div class="avatar-circle" style="width:60px;height:60px;font-size:0.9rem;">け</div><div class="staff-name" style="font-size:0.9rem;">けっち</div><div class="staff-role">Sub Staff</div></div>
+            <div class="staff-card"><div class="avatar-circle" style="width:60px;height:60px;font-size:0.9rem;">K</div><div class="staff-name" style="font-size:0.9rem;">KAZMAX</div><div class="staff-role">Sub Staff</div></div>
+            <div class="staff-card"><div class="avatar-circle" style="width:60px;height:60px;font-size:0.9rem;">A</div><div class="staff-name" style="font-size:0.9rem;">AYU</div><div class="staff-role">Sub Staff</div></div>
+            <div class="staff-card"><div class="avatar-circle" style="width:60px;height:60px;font-size:0.9rem;">な</div><div class="staff-name" style="font-size:0.9rem;">なんば</div><div class="staff-role">Sub Staff</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+    <p class="section-label reveal">FAQ</p>
+    <h2 class="reveal">よくあるご質問</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <div class="faq-list reveal">
+        <div class="faq-item">
+            <button class="faq-question">
+                <span class="faq-q-text">一人での参加でも大丈夫ですか？</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><div class="faq-answer-inner">もちろん大歓迎です！お一人で参加される方も多く、当日はスタッフが皆さんをつなげるサポートをします。気軽にご参加ください。</div></div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                <span class="faq-q-text">ドレスコードがわからない。相談できますか？</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><div class="faq-answer-inner">もちろんです！公式LINEにてご相談を受け付けています。「何を着ていけばいい？」「手持ちのスーツ・ドレスで大丈夫？」など、気軽にメッセージをお送りください。</div></div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                <span class="faq-q-text">お支払い方法はどうなりますか？</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><div class="faq-answer-inner">公式LINEよりお申込みいただいた後、お支払い方法の詳細をご案内します。詳しくはLINEにてご確認ください。</div></div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                <span class="faq-q-text">駐車場はありますか？</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><div class="faq-answer-inner">ヒルトン名古屋には提携駐車場がございます。ただし台数に限りがあるため、公共交通機関のご利用を推奨しています。最寄り駅は地下鉄東山線・名城線「栄」駅、徒歩約5分です。</div></div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                <span class="faq-q-text">アルコールが飲めない場合でも楽しめますか？</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><div class="faq-answer-inner">はい、ノンアルコールドリンクもご用意しております。お飲み物に関するご希望はお気軽にスタッフへお申し付けください。</div></div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                <span class="faq-q-text">当日の流れを教えてください。</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer"><div class="faq-answer-inner">17:30〜 受付開始 / 18:00〜 パーティー開始（フルコースディナー・お楽しみゲームなど）/ 20:00 終了予定です。詳細は参加者の方に別途ご案内します。</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ACCESS -->
+<section id="access">
+    <p class="section-label reveal">Access</p>
+    <h2 class="reveal">アクセス</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <div class="access-info reveal">
+        <div class="access-row">
+            <div class="access-label">会場</div>
+            <div class="access-value">ヒルトン名古屋「ONE O FIVE」</div>
+        </div>
+        <div class="access-row">
+            <div class="access-label">住所</div>
+            <div class="access-value">〒460-0008<br>愛知県名古屋市中区栄１丁目３−３</div>
+        </div>
+        <div class="access-row">
+            <div class="access-label">最寄駅</div>
+            <div class="access-value">地下鉄東山線・名城線「栄」駅 徒歩約5分</div>
+        </div>
+        <div class="access-row">
+            <div class="access-label">日時</div>
+            <div class="access-value">2026年10月25日（日）<br>18:00 — 20:00（受付 17:30〜）</div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <p class="section-label reveal">Contact</p>
+    <h2 class="reveal">お問い合わせ先</h2>
+    <div class="gold-divider reveal"><span>◆</span></div>
+    <div class="contact-box reveal">
+        <div class="contact-row">
+            <div class="contact-label">LINE</div>
+            <div class="contact-value">
+                公式LINEよりお気軽にメッセージをお送りください。<br>
+                <a href="https://lin.ee/6hyUu6b" target="_blank">→ 公式LINEはこちら</a>
+            </div>
+        </div>
+        <div class="contact-row">
+            <div class="contact-label">主催</div>
+            <div class="contact-value">EIKO（SORTEN 主催）</div>
+        </div>
+        <div class="contact-row">
+            <div class="contact-label">対応時間</div>
+            <div class="contact-value">平日・土日 10:00 — 21:00</div>
+        </div>
+    </div>
+    <p class="contact-note reveal">ドレスコードのご相談・キャンセルのご連絡など、<br>どんな些細なことでもお気軽にどうぞ。</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-title">SORTEN</div>
+    <p style="margin-top:0.4rem;">Dress Up Party in Hilton Nagoya</p>
+    <p style="margin-top:0.5rem;">2026.10.25 &nbsp;|&nbsp; 18:00 — 20:00</p>
+</footer>
+
+<script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.07 });
+    reveals.forEach(el => obs.observe(el));
+
+    // Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+        document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+    document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('open');
+            mobileMenu.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const item = btn.closest('.faq-item');
+            const answer = item.querySelector('.faq-answer');
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => {
+                i.classList.remove('open');
+                i.querySelector('.faq-answer').style.maxHeight = null;
+            });
+            if (!isOpen) {
+                item.classList.add('open');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+            }
+        });
+    });
+</script>
+</body>
+</html>
